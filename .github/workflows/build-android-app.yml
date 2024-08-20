@@ -1,4 +1,4 @@
-name: "Build Android app"
+name: Build and Deploy Android app
 
 on:
   push:
@@ -30,15 +30,26 @@ jobs:
 
       - name: Run Yarn Install
         run: |
-             npm i -g corepack
-             yarn install
+            npm i -g corepack
+            yarn install
 
       - name: Build application
         run: |
-             cd android
-             ./gradlew assembleRelease
+            cd android
+            ./gradlew bundleRelease
 
-      - name: Upload application
+      - name: Install Fastlane
+        run: |
+            gem install fastlane -NV
+
+      - name: Upload to Google Play Console
+        env:
+          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+        run: |
+          cd android
+          fastlane deploy_internal
+
+      - name: Upload APK as artifact
         uses: actions/upload-artifact@v2
         with:
           name: app

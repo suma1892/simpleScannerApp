@@ -1,0 +1,1 @@
+Ini adalah Aplikasi untuk scan qrCode sederhana tapi powerful
