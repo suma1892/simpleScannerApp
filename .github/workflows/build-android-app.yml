@@ -42,6 +42,9 @@ jobs:
         run: |
             gem install fastlane -NV
 
+      - name: Create JSON Key File
+        run: echo "${{ secrets.GOOGLE_PLAY_JSON_KEY }}" > ./scannerapp-433104-19db2aec4776.json
+
       - name: Upload to Google Play Console
         env:
           GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
