@@ -74,9 +74,6 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Text>Check Camera Permission integrate with github actions </Text>
-      <Text>
-        Check Camera Permission integrate with github test revisi update{' '}
-      </Text>
       <Text
         onPress={() => {
           try {
