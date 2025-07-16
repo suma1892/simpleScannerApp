@@ -3,6 +3,7 @@ import {
   Dimensions,
   Linking,
   PermissionsAndroid,
+  Platform,
   StyleSheet,
   Text,
   ToastAndroid,
@@ -11,7 +12,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {QRscanner} from 'react-native-qr-decode-image-camera';
+import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
+import deviceInfoModule from 'react-native-device-info';
 const {height} = Dimensions.get('window');
+
+const inAppUpdates = new SpInAppUpdates(
+  true, // isDebug
+);
 
 const App = () => {
   const [zoom, setzoom] = useState(0.2);
@@ -21,9 +28,29 @@ const App = () => {
 
   useEffect(() => {
     requestCameraPermission();
-
+    checkVersion();
     return () => {};
   }, []);
+
+  useEffect(() => {
+    return () => {};
+  }, []);
+
+  const checkVersion = async () => {
+    const curVersion = await deviceInfoModule.getVersion();
+    // console.log('curr = ', curVersion);
+    inAppUpdates.checkNeedsUpdate({curVersion: curVersion}).then(result => {
+      if (result.shouldUpdate) {
+        let updateOptions = {};
+        if (Platform.OS === 'android') {
+          updateOptions = {
+            updateType: IAUUpdateKind.IMMEDIATE,
+          };
+        }
+        inAppUpdates.startUpdate(updateOptions);
+      }
+    });
+  };
 
   const requestCameraPermission = async () => {
     try {
@@ -73,7 +100,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Check Camera Permission integrate with github actions </Text>
+      <Text>ini adalah update untuk in app update 1.7</Text>
       <Text
         onPress={() => {
           try {
